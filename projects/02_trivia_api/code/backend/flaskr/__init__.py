@@ -150,10 +150,14 @@ def create_app(test_config=None):
         previous_questions = body.get('previous_questions')
         quiz_category = body.get('quiz_category')
         quiz_category = int(quiz_category['id'])
-
-        questions = Question.query.filter_by(category=quiz_category).all()
+        print(previous_questions)
+        if quiz_category == 0:
+            questions = Question.query.all()
+        else:
+            questions = Question.query.filter_by(category=quiz_category).all()
         questions = [
-            question for question in questions if question not in previous_questions]
+            question for question in questions if question.id not in previous_questions]
+        print(questions)
         if len(questions) != 0:
             random_question = random.sample(questions, k=1)[0]
 
