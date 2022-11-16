@@ -1,0 +1,5 @@
+manager_jwt = eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImlWR0RFQU56VFNpS3JEQWRjYzUwaCJ9
+barista_jwt = 
+login_url = 
+https://dev-5kjn5d0mu43a1k3c.uk.auth0.com/authorize?audience=http://localhost:5000&response_type=token&client_id=FK5qwUN8nEEMRArt2Y5AcUMtGvCJgAfy&redirect_uri=https://127.0.0.1:8100
+https://dev-5kjn5d0mu43a1k3c.uk.auth0.com/authorize?audience=http://localhost:5000&response_type=token&client_id=FK5qwUN8nEEMRArt2Y5AcUMtGvCJgAfy&redirect_uri=https://127.0.0.1:8100/tabs/user-page/tabs/user-page
