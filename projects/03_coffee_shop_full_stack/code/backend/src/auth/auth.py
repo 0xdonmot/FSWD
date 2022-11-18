@@ -3,7 +3,7 @@ from flask import request, _request_ctx_stack
 from functools import wraps
 from jose import jwt
 from urllib.request import urlopen
-from settings import *
+from .settings import *
 
 # AuthError Exception
 '''
@@ -70,6 +70,7 @@ implement check_permissions(permission, payload) method
 
 
 def check_permissions(permission, payload):
+
     # check permissions in payload data
     if 'permissions' not in payload:
         raise AuthError({
@@ -78,7 +79,8 @@ def check_permissions(permission, payload):
         }, 400)
 
     # check specific permission is in payload
-    if permission not in payload['permission']:
+    if permission not in payload['permissions']:
+
         raise AuthError({
             'code': 'unauthorized',
             'description': 'Permission not found.'
@@ -106,7 +108,7 @@ def verify_decode_jwt(token):
     
     # get data in the header
     unverified_header = jwt.get_unverified_header(token)
-
+    
     # choose key
     rsa_key = {}
     if 'kid' not in unverified_header:
@@ -123,6 +125,7 @@ def verify_decode_jwt(token):
                 'n': key['n'],
                 'e': key['e']
             }
+
     if rsa_key:
         try:
             # use key to validate the jwt
@@ -178,7 +181,7 @@ def requires_auth(permission=''):
             token = get_token_auth_header()
             payload = verify_decode_jwt(token)
             check_permissions(permission, payload)
-            return f(payload, *args, **kwargs)
+            return f(*args, **kwargs)
 
         return wrapper
     return requires_auth_decorator

@@ -50,7 +50,7 @@ def create_app(test_config=None):
             or appropriate status code indicating reason for failure
     '''
     @app.route('/drinks-detail')
-    @requires_auth('get:drink-detail')
+    @requires_auth('get:drinks-detail')
     def get_drinks_detail():
 
         try:

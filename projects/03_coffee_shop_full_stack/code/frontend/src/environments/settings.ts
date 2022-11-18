@@ -1,10 +1,7 @@
-require('dotenv').config()
-
-const AUTH0_DOMAIN = process.env.AUTH0_DOMAIN
-const API_SERVER_URL = process.env.API_SERVER_URL
-const API_AUDIENCE = process.env.API_AUDIENCE
-const CLIENT_ID = process.env.CLIENT_ID
-const CALLBACK_URL = process.env.CALLBACK_URL
+const AUTH0_DOMAIN = 'dev-5kjn5d0mu43a1k3c.uk'
+const API_SERVER_URL = 'http://127.0.0.1:5000'
+const API_AUDIENCE = 'http://localhost:5000'
+const CLIENT_ID = 'FK5qwUN8nEEMRArt2Y5AcUMtGvCJgAfy'
+const CALLBACK_URL = 'http://127.0.0.1:8100'
 
 export { AUTH0_DOMAIN, API_SERVER_URL, API_AUDIENCE, CLIENT_ID, CALLBACK_URL }
-
