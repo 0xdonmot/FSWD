@@ -25,9 +25,13 @@ With Postgres running, create a database by running the following command:
 createdb casting_agency
 ```
 
+Note, the database url is setup for Heroku. The database url path will need to be configured if the app is to be used locally.
+
 ### Running the server
 
-To run the server, execute:
+To run the server, create a local database and update the database url path in setup.sh
+
+Then, execute:
 
 ```bash
 source setup.sh
