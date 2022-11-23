@@ -38,12 +38,153 @@ source setup.sh
 python app.py
 ```
 
-## Heroku Hosting
+### Roles
+
+There are three roles defined, with varying levels of access:
+
+- Casting Assistant.
+    - Can view actors and movies
+- Casting Director
+    - All permissions a Casting Assistant has and..
+    - Add or delete an actor from the database
+    - Modify actors or movies
+- Executive Producer
+    - All Casting Director permissions and..
+    - Add or delete a movie from the database
+
+## Local / Heroku Hosting
 
 The app is currently hosted at Heroku [here](https://casting-agency-capstone-48172.herokuapp.com/).
 It will be removed after 28th November 2022.
 
-However, to access the endpoints, you will need to send authentication headers with your requests.
+To host the app, please follow the below steps:
+- Create a Heroku account [here](https://signup.heroku.com/) and install the [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli#download-and-install)
+```
+# Install, if Heroku as Standalone
+curl https://cli-assets.heroku.com/install.sh | sh
+# Or, use Homebrew on Mac
+brew tap heroku/brew && brew install heroku
+# Verify the installation
+heroku --version
+# Verify the download
+which heroku
+```
+- Create an API key on Heroku and use it to login via the CLI. Enter your API key when asked for your password.
+```
+heroku login -i
+```
+- Ensure Git is installed locally.
+- Install Postgres
+```
+# Mac/Linux
+# Install Postgres using Brew. Reference: https://wiki.postgresql.org/wiki/Homebrew 
+brew install postgresql
+# Verify the installation
+postgres --version
+pg_ctl -D /usr/local/var/postgres start
+pg_ctl -D /usr/local/var/postgres stop
+```
+- Verify the database
+```
+# Open psql prompt
+psql [username]
+# View the available roles
+\du
+# View databases
+\list
+```
+- Clone this directory
+```
+# Create a project directory
+mkdir casting_agency_sample
+# Clone the FSND repo
+git clone https://github.com/0xdonmot/FSWD.git
+# Copy the casting agency app to the new directory
+cp FSND/projects/capstone/ casting_agency_sample/
+```
+- Create a python virtual environment, to isolate the required project dependencies and python runtime environment.
+```
+cd casting_agency_sample
+# Create a Virtual environment
+python3 -m venv myvenv 
+source myvenv/bin/activate
+```
+- Set up the environment variables
+```
+# You should have setup.sh and requirements.txt available
+chmod +x setup.sh
+source setup.sh
+# The setup.sh will create various environment variables including
+# DATABASE_URL, API_AUDIENCE, ALGORITHMS, AUTH0_DOMAIN, casting_assistant_auth,
+# casting_director_auth, executive_producer_auth
+# Change the DATABASE_URL, as applicable to you.
+```
+- Install the python dependences
+```
+pip install -r requirements.txt
+python app.py
+```
+- You should now be able to view and send calls at [http://127.0.0.1:5000/](http://127.0.0.1:5000/)
+
+#### Heroku Deployment
+
+- Create and save the app's environment variables in Heroku via _Heroku dashboard >> Particular App >> Settings >> Reveal Config Vars_.
+- Initialise Git
+```
+# Run it just once, in the beginning
+git init
+# For the first time commit, you need to configure the git username and email:
+git config --global user.email "you@example.com"
+git config --global user.name "Your Name"
+```
+- Create an App in the Heroku Cloud
+```
+heroku create [my-app-name] --buildpack heroku/python
+# For example, 
+# heroku create myapp-663697908 --buildpack heroku/python
+# https://myapp-663697908.herokuapp.com/ | https://git.heroku.com/myapp-663697908.git
+```
+- Add PostgreSQL addon for the database
+```
+heroku addons:create heroku-postgresql:hobby-dev --app [my-app-name]
+```
+- Configure the App
+```
+heroku config --app [my-app-name]
+# DATABASE_URL:
+# postgres://xjlhouchsdbnuw:0e9a708916e496be7136d0eda4c546253f1f5425ec041fd6e3efda3a1f819ba2@ec2-35-175-68-90.compute-1.amazonaws.com:5432/d3mrjpmsi4vvn1
+```
+- Copy the DATABASE_URL from the above step and update the local variable.
+```
+export DATABASE_URL="postgres://xjlhouchsdbnuw:0e9a708916e496be7136d0eda4c546253f1f5425ec041fd6e3efda3a1f819ba2@ec2-35-175-68-90.compute-1.amazonaws.com:5432/d3mrjpmsi4vvn1"
+# Verify
+echo $DATABASE_URL
+# postgres://xjlhouchsdbnuw:0e9a708916e496be7136d0eda4c546253f1f5425ec041fd6e3efda3a1f819ba2@ec2-35-175-68-90.compute-1.amazonaws.com:5432/d3mrjpmsi4vvn1
+```
+- Update the DATABASE_URL variable in the Heroku Cloud.
+- Push the app
+```
+# Check which files are ready to be committed
+git add -A
+git status
+git commit -m "your message"
+git push heroku master
+```
+- Open the app at the deployed app url!
+- Errors in the accessing the app can be debugged from the command line, using the following command.
+```
+heroku logs
+```
+
+
+[Getting Started with Python and Heroku](https://devcenter.heroku.com/articles/getting-started-with-python)
+[Deployment Docs](https://devcenter.heroku.com/categories/deployment)
+[FSND repo](https://github.com/0xdonmot/FSWD)
+
+
+#### Heroku API calls
+
+To access the API endpoints, you will need to send authentication headers with your requests.
 An example of how to do this using curl:
 ```
 curl https://casting-agency-capstone-48172.herokuapp.com/movies -H "Authorization: Bearer <insert_jwt_token>"
