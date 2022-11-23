@@ -52,10 +52,25 @@ There are three roles defined, with varying levels of access:
     - All Casting Director permissions and..
     - Add or delete a movie from the database
 
-## Local / Heroku Hosting
+### Data Model
+
+[_models.py_](models.py)
+
+There are two tables created in the database:
+- Actor
+    - This is used to store data on actors.
+    - It contains information on their name, age and gender
+- Movie
+    - This is used to store data on movies.
+    - It contains information on the movie name and release date.
+Each table has insert, update, delete and format helper functions.
+
+### Local / Heroku Hosting
 
 The app is currently hosted at Heroku [here](https://casting-agency-capstone-48172.herokuapp.com/).
 It will be removed after 28th November 2022.
+
+#### Hosting Steps
 
 To host the app, please follow the below steps:
 - Create a Heroku account [here](https://signup.heroku.com/) and install the [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli#download-and-install)
@@ -182,27 +197,25 @@ heroku logs
 [FSND repo](https://github.com/0xdonmot/FSWD)
 
 
-#### Heroku API calls
+#### Heroku API Calls
 
 To access the API endpoints, you will need to send authentication headers with your requests.
 An example of how to do this using curl:
 ```
 curl https://casting-agency-capstone-48172.herokuapp.com/movies -H "Authorization: Bearer <insert_jwt_token>"
 ```
-## API Endpoints
+### API Endpoints
+__Endpoints__
+- GET '/actors'
+- GET '/movies'
+- DELETE '/actors/<int:actor_id>'
+- DELETE '/movies/<int:movie_id>'
+- POST '/actors'
+- POST '/movies'
+- PATCH '/actors/<int:actor_id>'
+- PATCH '/movies/<int:movie_id>'
+
 ```
-
-
-Endpoints
-GET '/actors'
-GET '/movies'
-DELETE '/actors/<int:actor_id>'
-DELETE '/movies/<int:movie_id>'
-POST '/actors'
-POST '/movies'
-PATCH '/actors/<int:actor_id>'
-PATCH '/movies/<int:movie_id>'
-
 GET '/actors'
 - Fetches a list of actors, which contains information on the actors in the form of key: value pairs.
 - Request Arguments: None
@@ -310,12 +323,34 @@ POST '/movies/<int:movie_id>'
 ```
 
 
-## Testing
+### Testing
+
+#### Unit Tests
+There are various unit tests in the directory. These test each API endpoint for successes and failures. Each request requires authorization. Therefore, these tests also test the role based access controls.
+
 To run the tests, run
 ```
 createdb casting_agency_test
 python test_app.py
 ```
-
+#### Postman Tests
 There are additional Postman tests which can be found [here](casting_agency.postman_collection.json).
-The host value could be a local host (e.g. localhost:5000) or the heroku host.
+
+To run the tests, ensure you have Postman [installed](https://www.postman.com/downloads/), import the [testing file](casting_agency.postman_collection.json), ensure the host value is appropriate (e.g. localhost:5000). Right-click on the imported collection and click 'run collection'.
+
+### AUTH0 Tokens
+The API requires access tokens to access the data. The access tokens found in this directory will only work for 24 hours (until 24 November ~ 18:00). To request new access tokens, please use the below login details to login [here](https://dev-5kjn5d0mu43a1k3c.uk.auth0.com/authorize?audience=http://localhost:8080&response_type=token&client_id=cqTS6WHQJMrPFFMJBXeZijsagNISMzQJ&redirect_uri=http://127.0.0.1:8080). 
+
+- Casting Assistant
+    - email: casting_assistant@capstone.com
+    - password: Castingagency!
+- Casting Director
+    - email: casting_director@capstone.com
+    - password: Castingagency!
+- Executive Producer
+    - email: executive_producer@capstone.com
+    - password: Castingagency!
+
+The access token will be accessible in the url response.
+
+To generate three separate tokens, you will need to make this request in separate Incognito browsers.
